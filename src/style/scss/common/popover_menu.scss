@@ -17,7 +17,7 @@ window.popup {
         border-radius: $bar-menus-popover-radius;
 
         label {
-            font-size: 1.2rem * $popoverScaling;
+            font-size: 1rem * $popoverScaling;
             color: if($bar-menus-monochrome, $bar-menus-label, $bar-menus-popover-text);
         }
 

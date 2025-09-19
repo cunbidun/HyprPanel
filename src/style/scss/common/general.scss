@@ -29,7 +29,7 @@ tooltip {
 
     opacity: $bar-menus-opacity * 0.01;
 
-    font-size: 1.1em * $tooltip-scaling * 0.01;
+    font-size: 1.0em * $tooltip-scaling * 0.01;
 
     > * > * {
         padding: 0.6em;

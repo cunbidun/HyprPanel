@@ -39,7 +39,7 @@
 
     .media-indicator-current-song-name-label {
         color: if($bar-menus-monochrome, $bar-menus-label, $bar-menus-menu-media-song);
-        font-size: 1.35em;
+        font-size: 1em;
     }
 
     .media-indicator-current-song-author-label {
