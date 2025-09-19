@@ -34,7 +34,7 @@
         }
 
         .profile-name {
-            font-size: 1.5em;
+            font-size: 1.2em;
             color: if($bar-menus-monochrome, $bar-menus-label, $bar-menus-menu-dashboard-profile-name);
             margin-top: 0.75em;
         }
@@ -193,7 +193,7 @@
                 min-height: 3em;
 
                 label {
-                    font-size: 1.5em;
+                    font-size: 1.3em;
                 }
 
                 &.record.active {
@@ -417,7 +417,7 @@
             }
 
             label {
-                font-size: 1.3em;
+                font-size: 1em;
             }
 
             &.right.top {
@@ -480,7 +480,7 @@
         .stat {
             label {
                 margin-right: 0.75em;
-                font-size: 1.3em;
+                font-size: 1em;
                 min-width: 1.65em;
             }
 
@@ -577,7 +577,7 @@
 
         .stat-value {
             margin-bottom: 0.5em;
-            font-size: 0.9em;
+            font-size: 0.95em;
 
             &.cpu {
                 color: if(
