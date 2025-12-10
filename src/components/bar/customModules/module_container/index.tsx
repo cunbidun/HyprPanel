@@ -4,7 +4,7 @@ import { Astal } from 'astal/gtk3';
 import { bind, Variable } from 'astal';
 import { getIcon } from './helpers/icon';
 import { getLabel } from './helpers/label';
-import { initActionListener, initCommandPoller, setupModuleInteractions } from './setup';
+import { initActionListener, initCommandPoller, initSignalWatcher, setupModuleInteractions } from './setup';
 import { BarBoxChild } from 'src/components/bar/types';
 
 export const ModuleContainer = (moduleName: string, moduleMetadata: CustomBarModule): BarBoxChild => {
@@ -16,6 +16,7 @@ export const ModuleContainer = (moduleName: string, moduleMetadata: CustomBarMod
         execute: moduleExecute = '',
         executeOnAction: moduleExecuteOnAction = '',
         interval: moduleInterval = -1,
+        signalPath = '',
         hideOnEmpty: moduleHideOnEmpty = false,
         scrollThreshold: moduleScrollThreshold = 4,
         actions: moduleActions = {},
@@ -27,11 +28,14 @@ export const ModuleContainer = (moduleName: string, moduleMetadata: CustomBarMod
 
     const commandPoller = initCommandPoller(commandOutput, pollingInterval, moduleExecute, moduleInterval);
     initActionListener(actionExecutionListener, moduleExecuteOnAction, commandOutput);
+    const signalMonitor = initSignalWatcher(signalPath, () => commandPoller.execute());
+    // always fetch once so modules without polling still render initial value
+    commandPoller.execute();
 
     const module = Module({
         textIcon: bind(commandOutput).as((cmdOutput) => getIcon(moduleName, cmdOutput, moduleIcon)),
         tooltipText: bind(commandOutput).as((cmdOutput) => getLabel(moduleName, cmdOutput, moduleTooltip)),
-        boxClass: `cmodule-${moduleName.replace(/custom\//, '')}`,
+        boxClass: `cmodule cmodule-${moduleName.replace(/custom\//, '')}`,
         label: bind(commandOutput).as((cmdOutput) => getLabel(moduleName, cmdOutput, moduleLabel)),
         truncationSize: bind(Variable(typeof moduleTruncation === 'number' ? moduleTruncation : -1)),
         props: {
@@ -39,6 +43,7 @@ export const ModuleContainer = (moduleName: string, moduleMetadata: CustomBarMod
                 setupModuleInteractions(self, moduleActions, actionExecutionListener, moduleScrollThreshold),
             onDestroy: () => {
                 commandPoller.stop();
+                signalMonitor?.cancel();
             },
         },
         isVis: bind(commandOutput).as((cmdOutput) => (moduleHideOnEmpty ? cmdOutput.length > 0 : true)),

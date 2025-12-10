@@ -13,6 +13,7 @@ export type CustomBarModule = {
     execute?: string;
     executeOnAction?: string;
     interval?: number;
+    signalPath?: string;
     hideOnEmpty?: boolean;
     scrollThreshold?: number;
     actions?: CustomBarModuleActions;

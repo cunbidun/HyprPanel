@@ -1,5 +1,6 @@
 import { Variable, bind, execAsync } from 'astal';
 import { Astal } from 'astal/gtk3';
+import { Gio } from 'astal/file';
 import { BashPoller } from 'src/lib/poller/BashPoller';
 import { CustomBarModule } from '../types';
 import { InputHandlerService } from '../../utils/input/inputHandler';
@@ -41,6 +42,42 @@ export function initActionListener(
             commandOutput.set(cmdOutput);
         });
     });
+}
+
+export function initSignalWatcher(signalPath: string, onSignal: () => void): Gio.FileMonitor | undefined {
+    if (!signalPath?.length) {
+        return;
+    }
+
+    const file = Gio.File.new_for_path(signalPath);
+    const parent = file.get_parent();
+
+    try {
+        if (parent !== null && !parent.query_exists(null)) {
+            parent.make_directory_with_parents(null);
+        }
+        if (!file.query_exists(null)) {
+            file.create(Gio.FileCreateFlags.NONE, null);
+        }
+
+        const monitor = file.monitor_file(Gio.FileMonitorFlags.NONE, null);
+        monitor.connect('changed', (_mon, _file, _other, eventType) => {
+            switch (eventType) {
+                case Gio.FileMonitorEvent.CHANGES_DONE_HINT:
+                case Gio.FileMonitorEvent.CHANGED:
+                case Gio.FileMonitorEvent.CREATED:
+                case Gio.FileMonitorEvent.ATTRIBUTE_CHANGED:
+                    onSignal();
+                    break;
+                default:
+                    break;
+            }
+        });
+        return monitor;
+    } catch (error) {
+        console.error(`Failed to watch signal file ${signalPath}: ${error}`);
+        return;
+    }
 }
 
 /**

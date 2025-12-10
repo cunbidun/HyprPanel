@@ -423,3 +423,21 @@ $style-module-defaults: (
         'icon-size': 1.2em,
     )
 );
+
+/*
+ * #################################
+ * #    Custom Module Styling      #
+ * #################################
+ */
+@include styleModule(
+    'cmodule',
+    (
+        'text-color': $bar-buttons-volume-text,
+        'icon-color': $bar-buttons-volume-icon,
+        'icon-background': $bar-buttons-volume-icon_background,
+        'label-background': $bar-buttons-volume-background,
+        'inner-spacing': $bar-buttons-volume-spacing,
+        'border-enabled': $bar-buttons-volume-enableBorder,
+        'border-color': $bar-buttons-volume-border,
+    )
+);

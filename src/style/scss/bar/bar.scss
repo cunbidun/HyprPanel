@@ -139,6 +139,14 @@ $transparency-value-hover: 1 - $bar-button-background-hover-opacity-ratio;
         );
     }
 
+    /* Custom modules: default to volume palette for consistent RHS look */
+    &.cmodule {
+        background-color: transparentize(
+            if($bar-buttons-monochrome, $bar-buttons-background, $bar-buttons-volume-background),
+            $transparency-value
+        );
+    }
+
     &.windowtitle {
         background-color: transparentize(
             if($bar-buttons-monochrome, $bar-buttons-background, $bar-buttons-windowtitle-background),
