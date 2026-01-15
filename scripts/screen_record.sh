@@ -3,7 +3,7 @@
 
 # Get the default audio sink
 defaultSink=$(pactl get-default-sink)
-WF_RECORDER_OPTS="--audio=$defaultSink.monitor -c libx264rgb"
+WF_RECORDER_OPTS="--audio=$defaultSink.monitor -c libx264 -p preset=medium -p crf=15 -p profile=high -p level=4.1 -p tune=film"
 outputFile=""
 outputDir=""
 
